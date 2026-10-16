@@ -1,152 +1,83 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8f8fd">
   <title>TaskFlow | Task Manager</title>
-
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 <body>
-  <div class="app">
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Sidebar">
+      <a class="brand" href="#all" aria-label="TaskFlow home">
+        <span class="brand-icon" aria-hidden="true">✓</span>
+        <span>TaskFlow</span>
+      </a>
 
-    <!-- MENU LATERAL -->
-    <aside class="sidebar">
-      <h2 class="logo">✓ TaskFlow</h2>
-
-      <nav class="menu">
-        <button class="nav-link active" data-view="all">
-          ⌂ My Tasks
-        </button>
-        <button class="nav-link" data-view="today">
-          ◷ Today
-        </button>
-        <button class="nav-link" data-view="upcoming">
-          ◷ Upcoming
-        </button>
-        <button class="nav-link" data-view="completed">
-          ✓ Completed
-        </button>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button type="button" class="nav-item active" data-view="all" aria-current="page"><span class="nav-icon" data-icon="house"></span>My Tasks</button>
+        <button type="button" class="nav-item" data-view="today"><span class="nav-icon" data-icon="calendar"></span>Today</button>
+        <button type="button" class="nav-item" data-view="upcoming"><span class="nav-icon" data-icon="clock"></span>Upcoming</button>
+        <button type="button" class="nav-item" data-view="completed"><span class="nav-icon" data-icon="check-circle"></span>Completed</button>
       </nav>
 
-      <section class="categories">
-        <h3>Categories</h3>
-
-        <button class="category" data-category="Work">
-          <span class="dot work"></span>
-          Work <span id="count-work">0</span>
-        </button>
-
-        <button class="category" data-category="Study">
-          <span class="dot study"></span>
-          Study <span id="count-study">0</span>
-        </button>
-
-        <button class="category" data-category="Personal">
-          <span class="dot personal"></span>
-          Personal <span id="count-personal">0</span>
-        </button>
-
-        <button class="category" data-category="Health">
-          <span class="dot health"></span>
-          Health <span id="count-health">0</span>
-        </button>
+      <section class="categories" aria-label="Task categories">
+        <h2>Categories</h2>
+        <button class="category-item" type="button" data-category="Work"><span class="dot dot-work"></span><span>Work</span><span class="count" data-count="Work">0</span></button>
+        <button class="category-item" type="button" data-category="Study"><span class="dot dot-study"></span><span>Study</span><span class="count" data-count="Study">0</span></button>
+        <button class="category-item" type="button" data-category="Personal"><span class="dot dot-personal"></span><span>Personal</span><span class="count" data-count="Personal">0</span></button>
+        <button class="category-item" type="button" data-category="Health"><span class="dot dot-health"></span><span>Health</span><span class="count" data-count="Health">0</span></button>
       </section>
 
-      <button class="settings">⚙ Settings</button>
+      <button type="button" class="settings-link" id="settingsButton"><span class="nav-icon" data-icon="settings"></span>Settings</button>
     </aside>
 
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main class="content">
-      <header>
-        <h1>TaskFlow</h1>
-        <p>Organize your tasks with ease.</p>
+    <main class="main-content">
+      <header class="page-header">
+        <div><h1>TaskFlow</h1><p>Organize your tasks with ease.</p></div>
       </header>
 
-      <!-- ADICIONAR TAREFA -->
-      <form id="task-form" class="task-form">
-        <input
-          id="task-input"
-          type="text"
-          placeholder="Add a new task..."
-          required
-        >
-        <button type="submit">+</button>
+      <form id="taskForm" class="task-form">
+        <label class="sr-only" for="newTask">New task title</label>
+        <input id="newTask" name="title" type="text" placeholder="Add a new task..." maxlength="100" required>
+        <button type="submit" class="add-button" aria-label="Add task" title="Add task">+</button>
       </form>
 
-      <section class="tasks-section">
-        <div class="section-header">
-          <h2>My Tasks</h2>
-          <span id="task-total"></span>
-        </div>
-
-        <!-- FILTROS -->
+      <section class="tasks-section" aria-labelledby="viewTitle">
+        <div class="section-top"><h2 id="viewTitle">My Tasks</h2><span id="taskSummary" class="summary"></span></div>
         <div class="toolbar">
-          <div class="filters">
-            <button class="filter active" data-filter="all">All</button>
-            <button class="filter" data-filter="pending">Pending</button>
-            <button class="filter" data-filter="in-progress">In Progress</button>
-            <button class="filter" data-filter="completed">Completed</button>
+          <div class="status-filters" role="group" aria-label="Filter by status">
+            <button class="filter-button active" type="button" data-status="all" aria-pressed="true">All</button>
+            <button class="filter-button" type="button" data-status="pending" aria-pressed="false">Pending</button>
+            <button class="filter-button" type="button" data-status="in-progress" aria-pressed="false">In Progress</button>
+            <button class="filter-button" type="button" data-status="completed" aria-pressed="false">Completed</button>
           </div>
-
-          <select id="sort-tasks" aria-label="Sort tasks">
-            <option value="date">Due date</option>
-            <option value="priority">Priority</option>
-            <option value="name">Name</option>
-          </select>
+          <label class="sort-control"><span class="sort-glyph" aria-hidden="true">☷</span><span class="sr-only">Sort tasks</span><select id="sortSelect"><option value="due">Due date</option><option value="priority">Priority</option><option value="name">Name</option></select></label>
         </div>
-
-        <!-- CARTÕES GERADOS PELO JAVASCRIPT -->
-        <div id="task-list" class="task-list"></div>
+        <div id="taskList" class="task-list" aria-live="polite"></div>
+        <div id="emptyState" class="empty-state" hidden>No tasks found. Try another filter or add a new task.</div>
       </section>
     </main>
-
   </div>
 
-  <!-- JANELA PARA ADICIONAR OU EDITAR TAREFA -->
-  <dialog id="task-dialog">
-    <form id="details-form">
-      <h2>Task details</h2>
-
-      <label for="detail-title">Title</label>
-      <input id="detail-title" required>
-
-      <label for="detail-description">Description</label>
-      <input id="detail-description">
-
-      <label for="detail-category">Category</label>
-      <select id="detail-category">
-        <option>Work</option>
-        <option>Study</option>
-        <option>Personal</option>
-        <option>Health</option>
-      </select>
-
-      <label for="detail-priority">Priority</label>
-      <select id="detail-priority">
-        <option value="high">High</option>
-        <option value="medium">Medium</option>
-        <option value="low">Low</option>
-      </select>
-
-      <label for="detail-date">Due date</label>
-      <input id="detail-date" type="date" required>
-
-      <label for="detail-status">Status</label>
-      <select id="detail-status">
-        <option value="pending">Pending</option>
-        <option value="in-progress">In Progress</option>
-        <option value="completed">Completed</option>
-      </select>
-
-      <div class="dialog-actions">
-        <button type="button" id="cancel-dialog">Cancel</button>
-        <button type="submit">Save task</button>
+  <dialog id="taskDialog" class="task-dialog">
+    <form id="detailsForm" class="details-form">
+      <h2 id="dialogHeading">Task details</h2>
+      <label>Title <input id="detailTitle" maxlength="100" required></label>
+      <label>Description <input id="detailDescription" maxlength="160" placeholder="Optional description"></label>
+      <div class="form-grid">
+        <label>Category <select id="detailCategory"><option>Work</option><option>Study</option><option>Personal</option><option>Health</option></select></label>
+        <label>Priority <select id="detailPriority"><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></label>
       </div>
+      <div class="form-grid">
+        <label>Due date <input id="detailDue" type="date" required></label>
+        <label>Status <select id="detailStatus"><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="completed">Completed</option></select></label>
+      </div>
+      <div class="dialog-actions"><button type="button" id="cancelDetails" class="secondary-button">Cancel</button><button type="submit" class="primary-button">Save task</button></div>
     </form>
   </dialog>
-
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
