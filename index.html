@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow | Task Manager</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app">
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar">
+      <h2 class="logo">✓ TaskFlow</h2>
+
+      <nav class="menu">
+        <button class="nav-link active" data-view="all">
+          ⌂ My Tasks
+        </button>
+        <button class="nav-link" data-view="today">
+          ◷ Today
+        </button>
+        <button class="nav-link" data-view="upcoming">
+          ◷ Upcoming
+        </button>
+        <button class="nav-link" data-view="completed">
+          ✓ Completed
+        </button>
+      </nav>
+
+      <section class="categories">
+        <h3>Categories</h3>
+
+        <button class="category" data-category="Work">
+          <span class="dot work"></span>
+          Work <span id="count-work">0</span>
+        </button>
+
+        <button class="category" data-category="Study">
+          <span class="dot study"></span>
+          Study <span id="count-study">0</span>
+        </button>
+
+        <button class="category" data-category="Personal">
+          <span class="dot personal"></span>
+          Personal <span id="count-personal">0</span>
+        </button>
+
+        <button class="category" data-category="Health">
+          <span class="dot health"></span>
+          Health <span id="count-health">0</span>
+        </button>
+      </section>
+
+      <button class="settings">⚙ Settings</button>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="content">
+      <header>
+        <h1>TaskFlow</h1>
+        <p>Organize your tasks with ease.</p>
+      </header>
+
+      <!-- ADICIONAR TAREFA -->
+      <form id="task-form" class="task-form">
+        <input
+          id="task-input"
+          type="text"
+          placeholder="Add a new task..."
+          required
+        >
+        <button type="submit">+</button>
+      </form>
+
+      <section class="tasks-section">
+        <div class="section-header">
+          <h2>My Tasks</h2>
+          <span id="task-total"></span>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="toolbar">
+          <div class="filters">
+            <button class="filter active" data-filter="all">All</button>
+            <button class="filter" data-filter="pending">Pending</button>
+            <button class="filter" data-filter="in-progress">In Progress</button>
+            <button class="filter" data-filter="completed">Completed</button>
+          </div>
+
+          <select id="sort-tasks" aria-label="Sort tasks">
+            <option value="date">Due date</option>
+            <option value="priority">Priority</option>
+            <option value="name">Name</option>
+          </select>
+        </div>
+
+        <!-- CARTÕES GERADOS PELO JAVASCRIPT -->
+        <div id="task-list" class="task-list"></div>
+      </section>
+    </main>
+
+  </div>
+
+  <!-- JANELA PARA ADICIONAR OU EDITAR TAREFA -->
+  <dialog id="task-dialog">
+    <form id="details-form">
+      <h2>Task details</h2>
+
+      <label for="detail-title">Title</label>
+      <input id="detail-title" required>
+
+      <label for="detail-description">Description</label>
+      <input id="detail-description">
+
+      <label for="detail-category">Category</label>
+      <select id="detail-category">
+        <option>Work</option>
+        <option>Study</option>
+        <option>Personal</option>
+        <option>Health</option>
+      </select>
+
+      <label for="detail-priority">Priority</label>
+      <select id="detail-priority">
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+
+      <label for="detail-date">Due date</label>
+      <input id="detail-date" type="date" required>
+
+      <label for="detail-status">Status</label>
+      <select id="detail-status">
+        <option value="pending">Pending</option>
+        <option value="in-progress">In Progress</option>
+        <option value="completed">Completed</option>
+      </select>
+
+      <div class="dialog-actions">
+        <button type="button" id="cancel-dialog">Cancel</button>
+        <button type="submit">Save task</button>
+      </div>
+    </form>
+  </dialog>
+
+</body>
+</html>
